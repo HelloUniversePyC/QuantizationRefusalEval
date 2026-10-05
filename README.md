@@ -1,7 +1,7 @@
 # Research Plan
 
 ## General Research Question [To be refined by reading]
-In Local Models (Either Qwen 2.5 family or Llama 3.1 family or both) is there a significant reduction of the cosine similarity of the unquantized model's refusal direction as level of quantization increases? Does this change in refusal direction correlate with HarmBench jailbreak success probability? 
+Does the refusal direction survives quantization (Alignment Quantified with cosine similarity and Procrustes dissimilarity over top principal components) and does jailbreak susceptibility tracks it in the Llama 3.1 8B and Qwen 2.5 7B models across fp16 8-bit, 4-bit, and 3-bit quantization scales? 
 
 - [**Harm Bench**](https://www.harmbench.org/)
 ## Medium Article Primers
