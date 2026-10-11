@@ -1,0 +1,6 @@
+# Model: Llama 3.1 8B Instruct.
+- Precisions: fp16, 8-bit, 4-bit, and 3-bit via HQQ. If you want a faster start, use bitsandbytes for 8/4-bit first and add HQQ afterward.
+- Direction data: ~128 harmful prompts (AdvBench or JailbreakBench) vs. ~128 Alpaca prompts. For the matched control  match prompt length distribution (token count) between the two sets (length and format are the biggest confounds in difference-in-means. Skip anything fancier for now).
+- Metrics per layer: cosine between the fp16 direction and each quantized direction. Defer Procrustes and top-k PCs until the single-vector result looks sensible.
+- Behavioral measures: HarmBench DirectRequest on ~100 standard behaviors with the classifier, plus a cheap continuous proxy: the refusal score from Arditi (probability mass on refusal-start tokens like “I” at the first generated position). Since you only have a few precision levels, a continuous per-prompt measure gives you far more statistical power than 4 ASR numbers.
+- One functional test: ablate the fp16 direction from the quantized model and see whether refusal still drops.

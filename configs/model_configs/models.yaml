@@ -30,6 +30,12 @@
 
 # ===================== Open-Source Models ===================== #
 
+#Gemini Flash
+gemini_3_8_flash:
+  model:
+    model_name_or_path: gemini-3.8-flash
+    token: token
+  model_type: closed_source
 # Llama 2
 llama2_7b:
   model:
