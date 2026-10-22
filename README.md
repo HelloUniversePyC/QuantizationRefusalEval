@@ -46,76 +46,84 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
    - Match adversarial and neutral prompts by tokenized sequence length, accepting pairs whose lengths differ by at most two tokens:
 
      $$
-     \left \vert
-     L(x_i^{\mathrm{adv}})
-     -
-     L(x_i^{\mathrm{neu}})
-     \right \vert
-     \leq 2
-     $$
+      \left|
+      L(x_i^{\text{adv}})
+      -
+      L(x_i^{\text{neu}})
+      \right|
+      \le 2
+      $$
 
-     where $$L(x)$$ denotes the number of tokens in prompt $$x$$.
-   - Split the matched prompt pairs into two disjoint subsets:
-     - **75\% extraction set:** Used to estimate refusal directions.
-     - **25\% evaluation set:** Reserved for subsequent ablation and steering experiments.
 
-     $$
-     \mathcal{D}_{\mathrm{matched}}
-     =
-     \mathcal{D}_{\mathrm{extract}}
-     \cup
-     \mathcal{D}_{\mathrm{eval}}
-     $$
+     where L(x) denotes the number of tokens in prompt x.
+- Split the matched prompt pairs into two disjoint subsets:
+  - **75% extraction set:** Used to estimate refusal directions.
+  - **25% evaluation set:** Reserved for subsequent ablation and steering experiments.
 
-     $$
-     \vert\mathcal{D}_{\mathrm{extract}}\vert
-     \approx 0.75N,
-     \qquad
-     \vert\mathcal{D}_{\mathrm{eval}}\vert
-     \approx 0.25N
-     $$
 
-     where $$N$$ is the total number of matched prompt pairs. Ensure that the two subsets do not overlap (to prevent leakage). 
+    $$
+    \mathcal{D}_{\text{matched}}
+    =
+    \mathcal{D}_{\text{extract}}
+    \cup
+    \mathcal{D}_{\text{eval}}
+    $$
+
+    $$
+
+    |\mathcal{D}_{\text{extract}}|
+    \approx 0.75N,
+    \quad
+
+    |\mathcal{D}_{\text{eval}}|
+    \approx 0.25N
+    $$
+
+
+     where N is the total number of matched prompt pairs. Ensure that the two subsets do not overlap (to prevent leakage). 
 
 5. **Extract and Normalize Refusal Directions**
    - For each model family, quantization level, and transformer layer, perform forward passes on the adversarial and neutral prompts to collect their hidden-state activations.
-   - Let $$\mathbf{h}_{i,\ell}^{\mathrm{adv}}$$ and $$\mathbf{h}_{i,\ell}^{\mathrm{neu}}$$ denote the activations for the $$i$$-th matched pair at layer $$\ell$$.
+   -Let $\mathbf{h}_{i,\ell}^{\text{adv}}$ and $\mathbf{h}_{i,\ell}^{\text{neu}}$ denote the activations for the i-th matched pair at layer $\ell$.
    - Compute the mean activation for each prompt category:
 
      $$
-     \boldsymbol{\mu}_{\ell}^{\mathrm{adv}}
-     =
-     \frac{1}{N_{\mathrm{extract}}}
-     \sum_{i=1}^{N_{\mathrm{extract}}}
-     \mathbf{h}_{i,\ell}^{\mathrm{adv}}
-     $$
+      \boldsymbol{\mu}_{\ell}^{\text{adv}}
+      =
+      \frac{1}{N_{\text{extract}}}
+      \sum_{i=1}^{N_{\text{extract}}}
+      \mathbf{h}_{i,\ell}^{\text{adv}}
+      $$
+
 
      $$
-     \boldsymbol{\mu}_{\ell}^{\mathrm{neu}}
-     =
-     \frac{1}{N_{\mathrm{extract}}}
-     \sum_{i=1}^{N_{\mathrm{extract}}}
-     \mathbf{h}_{i,\ell}^{\mathrm{neu}}
-     $$
+      \boldsymbol{\mu}_{\ell}^{\text{neu}}
+      =
+      \frac{1}{N_{\text{extract}}}
+      \sum_{i=1}^{N_{\text{extract}}}
+      \mathbf{h}_{i,\ell}^{\text{neu}}
+      $$
+
 
    - Estimate the refusal direction using the Difference of Means (DoM):
 
      $$
-     \mathbf{d}_{\ell}
-     =
-     \boldsymbol{\mu}_{\ell}^{\mathrm{adv}}
-     -
-     \boldsymbol{\mu}_{\ell}^{\mathrm{neu}}
-     $$
+      \mathbf{d}_{\ell}
+      =
+      \boldsymbol{\mu}_{\ell}^{\text{adv}}
+      -
+      \boldsymbol{\mu}_{\ell}^{\text{neu}}
+      $$
 
    - Normalize the resulting direction vector to unit length (L2 Norm):
 
-     $$
-     \hat{\mathbf{d}}_{\ell}
-     =
-     \frac{\mathbf{d}_{\ell}}
-     {\vert\mathbf{d}_{\ell}\vert_2}
-     $$
+      $$
+      \hat{\mathbf{d}}_{\ell}
+      =
+      \frac{\mathbf{d}_{\ell}}
+      {\|\mathbf{d}_{\ell}\|_2}
+      $$
+
 
      Repeat this procedure independently for each model family, quantization level, and transformer layer to obtain refusal directions.
 
@@ -124,53 +132,57 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
    - Compute cosine similarity between the normalized reference direction and each quantized direction:
 
      $$
-     \operatorname{cos}(\hat{\mathbf{d}}_{\ell}^{16},
-     \hat{\mathbf{d}}_{\ell}^{q})
-     =
-     \frac{
-     \hat{\mathbf{d}}_{\ell}^{16}
-     \cdot
-     \hat{\mathbf{d}}_{\ell}^{q}
-     }{
-     \vert\hat{\mathbf{d}}_{\ell}^{16}\vert_2
-     \vert\hat{\mathbf{d}}_{\ell}^{q}\vert_2
-     }
-     $$
+      \cos(\hat{\mathbf{d}}_{\ell}^{16}, \hat{\mathbf{d}}_{\ell}^{q})
+      =
+      \frac{
+      \hat{\mathbf{d}}_{\ell}^{16}
+      \cdot
+      \hat{\mathbf{d}}_{\ell}^{q}
+      }{
+      \|\hat{\mathbf{d}}_{\ell}^{16}\|_2
+      \|\hat{\mathbf{d}}_{\ell}^{q}\|_2
+      }
+      $$
+
 
      where $$q \in \{8,4\}$$ denotes the quantization precision in bits. Since the vectors are normalized, their cosine similarity is equivalent to their dot product.
 
    - Perform bootstrap resampling with $$B = 1000$$ iterations. In each iteration, resample matched prompt pairs with replacement, recompute the Difference of Means directions, normalize the vectors, and calculate cosine similarity.
    - For bootstrap replicate $$b$$, denote the resulting cosine similarity as $$s_b^{(q)}$$. Estimate the mean similarity as:
 
-     $$
-     \bar{s}^{(q)}
-     =
-     \frac{1}{B}
-     \sum_{b=1}^{B}s_b^{(q)}
-     $$
+    $$
+    \bar{s}^{(q)}
+    =
+    \frac{1}{B}
+    \sum_{b=1}^{B}s_b^{(q)}
+    $$
+
 
    - Estimate the bootstrap standard deviation as:
 
-     $$
-     \sigma_{\mathrm{boot}}^{(q)}
-     =
-     \sqrt{
-     \frac{1}{B-1}
-     \sum_{b=1}^{B}
-     \left(s_b^{(q)}-\bar{s}^{(q)}\right)^2
-     }
-     $$
+      $$
+      \sigma_{\text{boot}}^{(q)}
+      =
+      \sqrt{
+      \frac{1}{B-1}
+      \sum_{b=1}^{B}
+      \left(s_b^{(q)}-\bar{s}^{(q)}\right)^2
+      }
+      $$
+
+
 
    - Obtain the $$95\%$$ bootstrap confidence interval using the 2.5th and 97.5th percentiles of the bootstrap similarity distribution:
 
-     $$
-     \mathrm{CI}_{95\%}^{(q)}
-     =
-     \left[
-     Q_{0.025}\left(s^{(q)}\right),
-     Q_{0.975}\left(s^{(q)}\right)
-     \right]
-     $$
+    $$
+    \text{CI}_{95\%}^{(q)}
+    =
+    \left[
+    Q_{0.025}\left(s^{(q)}\right),
+    Q_{0.975}\left(s^{(q)}\right)
+    \right]
+    $$
+
 
    - Report the mean cosine similarity, bootstrap standard deviation, and 95\% confidence interval for both FP16 vs. INT8 and FP16 vs. INT4 comparisons, stratified by model family and layer. Higher cosine similarity indicates greater directional alignment with the FP16 reference.
 
