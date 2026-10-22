@@ -32,11 +32,11 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
 
      $$
      \mathcal{M} =
-     \left\{
+     \lbrace
      M_{\mathrm{FP16}},
      M_{\mathrm{INT8}},
      M_{\mathrm{INT4}}
-     \right\}
+     \rbrace
      $$
 
    - Compare the resulting refusal directions across precision levels while keeping the model family and architecture fixed.
