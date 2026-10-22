@@ -7,7 +7,7 @@ Does the refusal direction survive quantization (quantified with cosine similari
 
 ## Roadmap
 
-[x] **Stage 1 (geometric analysis) is completed.** Remaining stages test whether the geometry is *causal*, and add validation and benchmarking so the results are reproducible across runtimes and precisions.
+- [x] **Stage 1 (geometric analysis) is completed.** Remaining stages test whether the geometry is *causal*, and add validation and benchmarking so the results are reproducible across runtimes and precisions.
 
 ### Stage 2: Causal Tests (Ablation and Steering)
 **Question:** Are the isolated refusal directions causally effective, and are FP16 and quantized directions actually functionally interchangeable?
