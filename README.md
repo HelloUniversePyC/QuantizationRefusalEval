@@ -3,7 +3,7 @@
 ![Word Cloud](figures/word_cloud_raw.png)
 
 ## Top Level Research Question
-Does the refusal direction survives quantization (quantified with cosine similarity and procrustes dissimiliarity) and does jailbreak susceptibility tracks it in the Llama 3.1 8B and Qwen 2.5 7B models across fp16 8-bit, 4-bit, and 3-bit quantization scales? 
+Does the refusal direction survive quantization (quantified with cosine similarity and procrustes dissimilarity) and does jailbreak susceptibility tracks it in the Llama 3.1 8B and Qwen 2.5 7B models across fp16 8-bit, 4-bit, and 3-bit quantization scales? 
 
 
 ## Stage 1: Proof of Concept
@@ -13,7 +13,7 @@ Is the harmful/harmless direction isolated via a difference of means procedure u
 
 ## Methodology 
 
-The goal of this initial stage is to get a diagnostic of candidate refusal directions and whether there is evidence of meaningful shift under quantization. This methodology is taken from [Arditi et al.](https://arxiv.org/abs/2406.11717) with the added variable of quantization level being analyzed as well as bootstrapping being used to inprove the robustness of initial descriptive results.
+The goal of this initial stage is to get a diagnostic of candidate refusal directions and whether there is evidence of meaningful shift under quantization. This methodology is taken from [Arditi et al.](https://arxiv.org/abs/2406.11717) with the added variable of quantization level being analyzed as well as bootstrapping being used to improve the robustness of initial descriptive results.
 
 ### Methodology Steps
 
@@ -127,7 +127,7 @@ Repeat this procedure independently for each model family, quantization level, a
 *Figure 2. Refusal direction preservation under bitsandbytes quantization (95% bootstrap bands)- Results Table*
 
 ![Refusal Direction and Activation Separation Across Quantization Levels- Sanity Check of Raw Results before Bootstrapping](figures/refusal_over_layers_check.png)
-*Figure 3. Refusal Direction and Activation Separation Across Quantization Levels- Raw Results Prior to Boostrapping*
+*Figure 3. Refusal Direction and Activation Separation Across Quantization Levels- Raw Results Prior to Bootstrapping*
 
 Note that this figure was used as a sanity check prior to bootstrapping to ensure the raw norm of the refusal vector and dprime coarsely increased in middle layers as seen in past studies with refusal directions [(Arditi et al.)](https://arxiv.org/abs/2406.11717).
 
@@ -201,7 +201,7 @@ Wee, S., Kim, S., Kim, H., Hwang, K., & Kwak, N. (2025). Alignment-aware quantiz
 - [x] [Speeding Up Large Language Models: A Deep Dive into GPTQ and AWQ Quantization](https://medium.com/@kimdoil1211/speeding-up-large-language-models-a-deep-dive-into-gptq-and-awq-quantization-0bb001eaabd4)
 - [x] [GGUF Optimization: A Technical Deep Dive (Part 1 of 2)](https://medium.com/@michael.hannecke/gguf-optimization-a-technical-deep-dive-for-practitioners-ce84c8987944)
 
-## Relevant Literature from Harvard AISST Curiculum
+## Relevant Literature from Harvard AISST Curriculum
 - [**Jailbroken: How Does LLM Safety Training Fail?**](https://arxiv.org/pdf/2307.02483)
 
 ## Datasets/Tools
