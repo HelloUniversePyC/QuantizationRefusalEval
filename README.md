@@ -46,11 +46,11 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
    - Match adversarial and neutral prompts by tokenized sequence length, accepting pairs whose lengths differ by at most two tokens:
 
      $$
-      \left|
+      \lbrace\vert
       L(x_i^{\text{adv}})
       -
-      L(x_i^{\text{neu}})
-      \right|
+      L(x_i^{\text{neu}} \vert)
+      \rbrace
       \le 2
       $$
 
@@ -71,11 +71,11 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
 
     $$
 
-    |\mathcal{D}_{\text{extract}}|
+    \vert\mathcal{D}_{\text{extract}}\vert
     \approx 0.75N,
     \quad
 
-    |\mathcal{D}_{\text{eval}}|
+    \vert\mathcal{D}_{\text{eval}}\vert
     \approx 0.25N
     $$
 
@@ -121,7 +121,7 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
       \hat{\mathbf{d}}_{\ell}
       =
       \frac{\mathbf{d}_{\ell}}
-      {\|\mathbf{d}_{\ell}\|_2}
+      {\vert\mathbf{d}_{\ell}\vert_2}
       $$
 
 
@@ -139,8 +139,8 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
       \cdot
       \hat{\mathbf{d}}_{\ell}^{q}
       }{
-      \|\hat{\mathbf{d}}_{\ell}^{16}\|_2
-      \|\hat{\mathbf{d}}_{\ell}^{q}\|_2
+      \vert\hat{\mathbf{d}}_{\ell}^{16}\vert_2
+      \vert\hat{\mathbf{d}}_{\ell}^{q}\vert_2
       }
       $$
 
@@ -166,7 +166,7 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
       \sqrt{
       \frac{1}{B-1}
       \sum_{b=1}^{B}
-      \left(s_b^{(q)}-\bar{s}^{(q)}\right)^2
+      \lbrace(s_b^{(q)}-\bar{s}^{(q)}\rbrace^2
       }
       $$
 
@@ -177,10 +177,10 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
     $$
     \text{CI}_{95\%}^{(q)}
     =
-    \left[
-    Q_{0.025}\left(s^{(q)}\right),
-    Q_{0.975}\left(s^{(q)}\right)
-    \right]
+    \lbrace[]
+    Q_{0.025}\lbrace(s^{(q)}\rbrace),
+    Q_{0.975}\lbrace(s^{(q)}\rbrace)
+    \rbrace]
     $$
 
 
