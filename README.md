@@ -46,12 +46,12 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
    - Match adversarial and neutral prompts by tokenized sequence length, accepting pairs whose lengths differ by at most two tokens:
 
      $$
-      \lbrace\vert
+      \left|
       L(x_i^{\text{adv}})
       -
-      L(x_i^{\text{neu}} \vert)
-      \rbrace
-      \le 2
+      L(x_i^{\text{neu}})
+      \right|
+      \leq 2
       $$
 
 
