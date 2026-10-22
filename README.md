@@ -5,6 +5,41 @@
 ## Top Level Research Question
 Does the refusal direction survive quantization (quantified with cosine similarity and procrustes dissimilarity) and does jailbreak susceptibility tracks it in the Llama 3.1 8B and Qwen 2.5 7B models across fp16 8-bit, 4-bit, and 3-bit quantization scales? 
 
+## Roadmap
+
+**Stage 1 (geometric analysis) is completed.** Remaining stages test whether the geometry is *causal*, and add validation and benchmarking so the results are reproducible across runtimes and precisions.
+
+### Stage 2: Causal Tests (Ablation and Steering)
+**Question:** Are the isolated refusal directions causally effective, and are FP16 and quantized directions actually functionally interchangeable?
+- [ ] **Add a noise floor**: split-half cosine similarity *within* FP16, to compare against the FP16-vs-quantized values
+- [ ] **Directional ablation** on the held-out 25% evaluation set: measure the change in refusal rate
+- [ ] **Activation steering**: add the direction to harmless prompts and measure induced refusals
+- [ ] **Cross-application test**: apply the FP16-derived direction to quantized models, and each quantized model's own direction to itself, and compare effects
+- [ ] **HarmBench integration**: attack success rate (ASR) per model and precision, correlated with direction preservation
+- [ ] **Implement Procrustes dissimilarity** over the top principal components (or drop it from the headline question)
+
+### Stage 3: Validation and Benchmarking
+**Goal:** Make results reproducible and measure the practical cost of each precision.
+- [ ] Config-driven benchmark script that logs latency, tokens/s, and peak memory for FP16, INT8, and INT4
+- [ ] Parity check: compare logits and per-layer hidden states between FP16 and each quantized variant on fixed prompts, and flag layers where divergence is largest
+- [ ] Short write-up of one divergence investigation (where it occurred, how it was isolated)
+
+### Stage 4: Cross-Runtime Check (ONNX Runtime and OpenVINO)
+- [ ] **Export to ONNX** and run in ONNX Runtime; compare outputs against the PyTorch baseline
+- [ ] **Convert to OpenVINO** and run INT8 weight compression; compare outputs, latency, and memory
+- [ ] Check whether refusal behavior on a small prompt set is preserved across runtimes
+
+### Stage 5: Reproducibility
+- [ ] **Dockerfile** for benchmark and evaluation scripts
+- [ ] **CI job (GitHub Actions)** that runs a small CPU-only test on every push (shape and dtype checks, output validity, parity test, etc. )
+
+### Ideas for Future Extensions
+- FP8 comparison on Hopper-class hardware
+- Quantization method as a variable (bitsandbytes NF4 vs. GPTQ vs. AWQ).
+- Additional model families (e.g. Gemma)
+- Profiling with PyTorch Profiler, Nsight Systems, and VTune
+- Logistic-regression probes in place of difference-of-means directions
+
 
 ## Stage 1: Proof of Concept
 
@@ -140,41 +175,6 @@ In both Qwen2.5-7B and Llama-3.1-8B, the fp16 refusal direction is almost identi
 **Bottom Line** Under bitsandbytes quantization, the difference-in-means harmful/harmless direction is largely preserved in both models. 8-bit leaves it essentially unchanged, and 4-bit rotates it by roughly 10-15° on average across mid-layers (more of a rotation in Llama model).
 
 This initial coarse analysis does encourage further investigation into what the correlation would be in an even smaller quantization level (3-bit) given the modest rotation found in the 4-bit model.
-
-## Roadmap
-
-**Stage 1 (geometric analysis) is completed.** Remaining stages test whether the geometry is *causal*, and add validation and benchmarking so the results are reproducible across runtimes and precisions.
-
-### Stage 2: Causal Tests (Ablation and Steering)
-**Question:** Are the isolated refusal directions causally effective, and are FP16 and quantized directions actually functionally interchangeable?
-- [ ] **Add a noise floor**: split-half cosine similarity *within* FP16, to compare against the FP16-vs-quantized values
-- [ ] **Directional ablation** on the held-out 25% evaluation set: measure the change in refusal rate
-- [ ] **Activation steering**: add the direction to harmless prompts and measure induced refusals
-- [ ] **Cross-application test**: apply the FP16-derived direction to quantized models, and each quantized model's own direction to itself, and compare effects
-- [ ] **HarmBench integration**: attack success rate (ASR) per model and precision, correlated with direction preservation
-- [ ] **Implement Procrustes dissimilarity** over the top principal components (or drop it from the headline question)
-
-### Stage 3: Validation and Benchmarking
-**Goal:** Make results reproducible and measure the practical cost of each precision.
-- [ ] Config-driven benchmark script that logs latency, tokens/s, and peak memory for FP16, INT8, and INT4
-- [ ] Parity check: compare logits and per-layer hidden states between FP16 and each quantized variant on fixed prompts, and flag layers where divergence is largest
-- [ ] Short write-up of one divergence investigation (where it occurred, how it was isolated)
-
-### Stage 4: Cross-Runtime Check (ONNX Runtime and OpenVINO)
-- [ ] **Export to ONNX** and run in ONNX Runtime; compare outputs against the PyTorch baseline
-- [ ] **Convert to OpenVINO** and run INT8 weight compression; compare outputs, latency, and memory
-- [ ] Check whether refusal behavior on a small prompt set is preserved across runtimes
-
-### Stage 5: Reproducibility
-- [ ] **Dockerfile** for benchmark and evaluation scripts
-- [ ] **CI job (GitHub Actions)** that runs a small CPU-only test on every push (shape and dtype checks, output validity, parity test, etc. )
-
-### Ideas for Future Extensions
-- FP8 comparison on Hopper-class hardware
-- Quantization method as a variable (bitsandbytes NF4 vs. GPTQ vs. AWQ).
-- Additional model families (e.g. Gemma)
-- Profiling with PyTorch Profiler, Nsight Systems, and VTune
-- Logistic-regression probes in place of difference-of-means directions
 
 
 ## Past Literature [Research Articles]
