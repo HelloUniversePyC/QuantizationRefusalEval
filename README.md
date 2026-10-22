@@ -44,7 +44,7 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
      \left| L(x_i^{\text{adv}}) - L(x_i^{\text{neu}}) \right| \leq 2
 ```
 
-     where $`L(x)`$ denotes the number of tokens in prompt $`x`$.
+  where $`L(x)`$ denotes the number of tokens in prompt $`x`$.
    - Split the matched prompt pairs into two disjoint subsets:
      - **75% extraction set:** Used to estimate refusal directions.
      - **25% evaluation set:** Reserved for subsequent ablation and steering experiments.
@@ -57,7 +57,7 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
      \lvert\mathcal{D}_{\text{extract}}\rvert \approx 0.75N, \quad \lvert\mathcal{D}_{\text{eval}}\rvert \approx 0.25N
 ```
 
-     where $`N`$ is the total number of matched prompt pairs. Ensure that the two subsets do not overlap (to prevent leakage). 
+  where $`N`$ is the total number of matched prompt pairs. Ensure that the two subsets do not overlap (to prevent leakage). 
 
 5. **Extract and Normalize Refusal Directions**
    - For each model family, quantization level, and transformer layer, perform forward passes on the adversarial and neutral prompts to collect their hidden-state activations.
@@ -84,7 +84,7 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
      \hat{\mathbf{d}}_{\ell} = \frac{\mathbf{d}_{\ell}}{\lVert\mathbf{d}_{\ell}\rVert_2}
 ```
 
-     Repeat this procedure independently for each model family, quantization level, and transformer layer to obtain refusal directions.
+Repeat this procedure independently for each model family, quantization level, and transformer layer to obtain refusal directions.
 
 6. **Bootstrap Cosine Similarity Across Quantization Levels**
    - Compare the normalized FP16 refusal directions against the corresponding INT8 and INT4 directions for each model family and transformer layer.
@@ -94,7 +94,7 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
      \cos(\hat{\mathbf{d}}_{\ell}^{16}, \hat{\mathbf{d}}_{\ell}^{q}) = \frac{\hat{\mathbf{d}}_{\ell}^{16} \cdot \hat{\mathbf{d}}_{\ell}^{q}}{\lVert\hat{\mathbf{d}}_{\ell}^{16}\rVert_2 \, \lVert\hat{\mathbf{d}}_{\ell}^{q}\rVert_2}
 ```
 
-     where $`q \in \lbrace 8, 4 \rbrace`$ denotes the quantization precision in bits. Since the vectors are normalized, their cosine similarity is equivalent to their dot product.
+  where $`q \in \lbrace 8, 4 \rbrace`$ denotes the quantization precision in bits. Since the vectors are normalized, their cosine similarity is equivalent to their dot product.
 
    - Perform bootstrap resampling with $`B = 1000`$ iterations. In each iteration, resample matched prompt pairs with replacement, recompute the Difference of Means directions, normalize the vectors, and calculate cosine similarity.
    - For bootstrap replicate $`b`$, denote the resulting cosine similarity as $`s_b^{(q)}`$. Estimate the mean similarity as:
