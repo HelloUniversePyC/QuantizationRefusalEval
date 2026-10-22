@@ -21,8 +21,7 @@ Does the refusal direction survive quantization (quantified with cosine similari
 ### Stage 3: Validation and Benchmarking
 **Goal:** Make results reproducible and measure the practical cost of each precision.
 - [ ] Config-driven benchmark script that logs latency, tokens/s, and peak memory for FP16, INT8, and INT4
-- [ ] Parity check: compare logits and per-layer hidden states between FP16 and each quantized variant on fixed prompts, and flag layers where divergence is largest
-- [ ] Short write-up of one divergence investigation (where it occurred, how it was isolated)
+- [ ] Parity check: compare logits and per-layer hidden states between FP16 and each quantized variant on fixed prompts, and flag layers where divergence is 
 
 ### Stage 4: Cross-Runtime Check (ONNX Runtime and OpenVINO)
 - [ ] **Export to ONNX** and run in ONNX Runtime; compare outputs against the PyTorch baseline
