@@ -29,6 +29,7 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
    - Load the Qwen2.5-7B-Instruct and Llama 3.1-8B models and corresponding tokenizers on A100 GPU.
    - Use BitsAndBytes quantization configurations to obtain three model precision variants: FP16 (16-bit), INT8 (8-bit), and INT4 (4-bit).
    - Denote the model variants as:
+
      $$
      \mathcal{M} =
      \left\{
@@ -45,11 +46,11 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
    - Match adversarial and neutral prompts by tokenized sequence length, accepting pairs whose lengths differ by at most two tokens:
 
      $$
-     \left|
+     \left \vert
      L(x_i^{\mathrm{adv}})
      -
      L(x_i^{\mathrm{neu}})
-     \right|
+     \right \vert
      \leq 2
      $$
 
@@ -67,10 +68,10 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
      $$
 
      $$
-     |\mathcal{D}_{\mathrm{extract}}|
+     \vert\mathcal{D}_{\mathrm{extract}}\vert
      \approx 0.75N,
      \qquad
-     |\mathcal{D}_{\mathrm{eval}}|
+     \vert\mathcal{D}_{\mathrm{eval}}\vert
      \approx 0.25N
      $$
 
@@ -113,7 +114,7 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
      \hat{\mathbf{d}}_{\ell}
      =
      \frac{\mathbf{d}_{\ell}}
-     {\|\mathbf{d}_{\ell}\|_2}
+     {\vert\mathbf{d}_{\ell}\vert_2}
      $$
 
      Repeat this procedure independently for each model family, quantization level, and transformer layer to obtain refusal directions.
@@ -131,8 +132,8 @@ The goal of this initial stage is to get a diagnostic of candidate refusal direc
      \cdot
      \hat{\mathbf{d}}_{\ell}^{q}
      }{
-     \|\hat{\mathbf{d}}_{\ell}^{16}\|_2
-     \|\hat{\mathbf{d}}_{\ell}^{q}\|_2
+     \vert\hat{\mathbf{d}}_{\ell}^{16}\vert_2
+     \vert\hat{\mathbf{d}}_{\ell}^{q}\vert_2
      }
      $$
 
