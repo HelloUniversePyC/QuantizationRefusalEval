@@ -16,7 +16,7 @@ Does the refusal direction survive quantization (quantified with cosine similari
 - [ ] **Activation steering**: add the direction to harmless prompts and measure induced refusals
 - [ ] **Cross-application test**: apply the FP16-derived direction to quantized models, and each quantized model's own direction to itself, and compare effects
 - [ ] **HarmBench integration**: attack success rate (ASR) per model and precision, correlated with direction preservation
-- [ ] **Implement Procrustes dissimilarity** over the top principal components (or drop it from the headline question)
+- [ ] **Implement Procrustes dissimilarity** over the top principal components
 
 ### Stage 3: Validation and Benchmarking
 **Goal:** Make results reproducible and measure the practical cost of each precision.
